@@ -1,0 +1,37 @@
+name: Terraform pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  infracost:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.1.2
+
+    - name: Setup Infracost
+      uses: infracost/actions/setup@v2
+      # See https://github.com/infracost/actions/tree/master/setup for other inputs
+      # If you can't use this action, see Docker images in https://infracost.io/cicd
+      with:
+        api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+    # Generate Infracost JSON file as the baseline.
+    - name: Generate Infracost cost estimate baseline
+      run: |
+        infracost breakdown --path=terraform \
+                            --format=html \
+                            --out-file=/home/runner/work/infracost/infracost/infracost-report.html
+                            
+    - name: Upload Infracost Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: infracost-report
+        path: infracost-report.html    
