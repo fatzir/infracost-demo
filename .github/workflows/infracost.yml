@@ -23,12 +23,12 @@ jobs:
     # Generate Infracost JSON file as the baseline.
     - name: Generate Infracost cost estimate baseline
       run: |
-        infracost breakdown --path=./terraform \
+        infracost breakdown --path=terraform \
                             --format=html \
-                            --out-file=/home/runner/work/infracost/infracost.html
+                            --out-file=/home/runner/work/infracost/infracost/infracost.html
                             
     - name: Upload Infracost Report
       uses: actions/upload-artifact@v2
       with:
         name: infracost-report
-        path: /home/runner/work/infracost/infracost.html    
+        path: /home/runner/work/infracost/infracost/infracost.html    
