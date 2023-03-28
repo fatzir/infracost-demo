@@ -25,10 +25,10 @@ jobs:
       run: |
         infracost breakdown --path=terraform \
                             --format=html \
-                            infracost-report/infracost.html
+                            ./infracost.html
                             
     - name: Upload Infracost Report
       uses: actions/upload-artifact@v2
       with:
         name: infracost-report
-        path: infracost-report/infracost.html    
+        path: ./infracost.html    
